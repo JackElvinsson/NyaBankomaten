@@ -35,6 +35,10 @@ public class MainController {
     @FXML
     private Button payoffLoanButton;
     @FXML
+    private Button deposit;
+    @FXML
+    private Button withdraw;
+    @FXML
     private TextField addClientName;
     @FXML
     private TextField addClientSSC;
