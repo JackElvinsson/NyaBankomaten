@@ -131,7 +131,7 @@
             </GridPane>
          </left>
          <right>
-            <GridPane prefHeight="672.0" prefWidth="720.0" BorderPane.alignment="CENTER">
+            <GridPane prefHeight="672.0" prefWidth="717.0" BorderPane.alignment="CENTER">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="708.0" minWidth="10.0" prefWidth="685.0" />
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="274.0" minWidth="10.0" prefWidth="35.0" />
@@ -347,6 +347,7 @@
                               </Button>
                            </children>
                         </GridPane>
+                        <Pane disable="true" layoutY="-1.0" prefHeight="607.0" prefWidth="683.0" style="-fx-background-color: gray;" />
                      </children>
                   </Pane>
                </children>
