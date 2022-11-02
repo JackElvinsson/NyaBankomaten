@@ -1,17 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="672.0" prefWidth="1096.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.nyabankomaten.MainController">
    <children>
@@ -31,7 +22,7 @@
                   <RowConstraints maxHeight="62.0" minHeight="10.0" prefHeight="34.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Pane prefHeight="258.0" prefWidth="324.0" style="-fx-background-color: white;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <Pane prefHeight="258.0" prefWidth="324.0" style="-fx-background-color: cornflowerblue;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <children>
                         <BorderPane layoutX="-1.0" layoutY="-1.0" prefHeight="158.0" prefWidth="325.0">
@@ -100,7 +91,7 @@
                   </Pane>
                   <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" GridPane.columnIndex="1" GridPane.rowIndex="3">
                      <children>
-                        <GridPane layoutY="-1.0" prefHeight="411.0" prefWidth="324.0">
+                        <GridPane layoutY="-1.0" prefHeight="433.0" prefWidth="324.0">
                           <columnConstraints>
                               <ColumnConstraints hgrow="SOMETIMES" maxWidth="103.0" minWidth="5.0" prefWidth="14.0" />
                             <ColumnConstraints hgrow="SOMETIMES" maxWidth="299.0" minWidth="10.0" prefWidth="294.0" />
