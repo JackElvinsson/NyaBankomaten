@@ -31,7 +31,7 @@
                   <RowConstraints maxHeight="62.0" minHeight="10.0" prefHeight="34.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Pane prefHeight="258.0" prefWidth="324.0" style="-fx-background-color: whte;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <Pane prefHeight="258.0" prefWidth="324.0" style="-fx-background-color: white;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <children>
                         <BorderPane layoutX="-1.0" layoutY="-1.0" prefHeight="158.0" prefWidth="325.0">
