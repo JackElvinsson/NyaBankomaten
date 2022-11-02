@@ -91,6 +91,7 @@ public class MainController implements Initializable {
     protected void onCreateNewAccountClick() {
         Account a = new Account(l.getNewAccountNumber(listOfAllAccounts));
         client.addAccount(a);
+        listViewAccounts.refresh();
     }
 
     //Funkar ej
