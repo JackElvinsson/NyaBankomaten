@@ -52,12 +52,12 @@
                                           <Font name="System Bold Italic" size="14.0" />
                                        </font>
                                     </Label>
-                                    <TextField prefHeight="32.0" prefWidth="200.0" promptText="Ex. Marston" style="-fx-background-color: lightgray;" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                                    <TextField fx:id="addClientSSC" prefHeight="32.0" prefWidth="200.0" promptText="Ex. Marston" style="-fx-background-color: lightgray;" GridPane.columnIndex="3" GridPane.rowIndex="2">
                                        <font>
                                           <Font size="14.0" />
                                        </font>
                                     </TextField>
-                                    <TextField prefHeight="31.0" prefWidth="200.0" promptText="Ex. John" style="-fx-background-color: lightgray;" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                                    <TextField fx:id="addClientName" prefHeight="31.0" prefWidth="200.0" promptText="Ex. John" style="-fx-background-color: lightgray;" GridPane.columnIndex="3" GridPane.rowIndex="1">
                                        <font>
                                           <Font size="14.0" />
                                        </font>
@@ -78,7 +78,7 @@
                                   <RowConstraints maxHeight="47.0" minHeight="0.0" prefHeight="12.0" vgrow="SOMETIMES" />
                                 </rowConstraints>
                                  <children>
-                                    <Button mnemonicParsing="false" prefHeight="15.0" prefWidth="301.0" text="Add new client" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                    <Button fx:id="addClientButton" mnemonicParsing="false" onAction="#onAddClientClick" prefHeight="15.0" prefWidth="301.0" text="Add new client" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                        <font>
                                           <Font name="System Bold" size="22.0" />
                                        </font>
@@ -173,7 +173,7 @@
                                     </Label>
                                  </children>
                               </GridPane>
-                              <ListView prefHeight="279.0" prefWidth="242.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <ListView fx:id="listViewAccounts" prefHeight="279.0" prefWidth="242.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                            </children>
                         </GridPane>
                         <GridPane layoutX="295.0" layoutY="18.0" prefHeight="569.0" prefWidth="368.0" style="-fx-background-color: white;">
@@ -207,22 +207,22 @@
                                   <RowConstraints maxHeight="46.0" minHeight="5.0" prefHeight="5.0" vgrow="SOMETIMES" />
                                 </rowConstraints>
                                  <children>
-                                    <Button mnemonicParsing="false" prefHeight="33.0" prefWidth="114.0" text="Deposit" GridPane.columnIndex="1">
+                                    <Button fx:id="deposit" mnemonicParsing="false" onAction="#onDepositClick" prefHeight="33.0" prefWidth="114.0" text="Deposit" GridPane.columnIndex="1">
                                        <font>
                                           <Font name="System Bold Italic" size="14.0" />
                                        </font>
                                     </Button>
-                                    <Button mnemonicParsing="false" prefHeight="33.0" prefWidth="114.0" text="Withdraw" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                    <Button fx:id="withdraw" mnemonicParsing="false" onAction="#onWithdrawClick" prefHeight="33.0" prefWidth="114.0" text="Withdraw" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                        <font>
                                           <Font name="System Bold Italic" size="14.0" />
                                        </font>
                                     </Button>
-                                    <TextField prefHeight="35.0" prefWidth="218.0" style="-fx-background-color: lightgray;" GridPane.columnIndex="3">
+                                    <TextField fx:id="depositAmount" prefHeight="35.0" prefWidth="218.0" style="-fx-background-color: lightgray;" GridPane.columnIndex="3">
                                        <font>
                                           <Font size="14.0" />
                                        </font>
                                     </TextField>
-                                    <TextField prefHeight="19.0" prefWidth="210.0" style="-fx-background-color: lightgray;" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                                    <TextField fx:id="withdrawAmount" prefHeight="19.0" prefWidth="210.0" style="-fx-background-color: lightgray;" GridPane.columnIndex="3" GridPane.rowIndex="1">
                                        <font>
                                           <Font size="14.0" />
                                        </font>
@@ -246,7 +246,7 @@
                                           <Font name="System Bold" size="22.0" />
                                        </font>
                                     </Label>
-                                    <ScrollPane hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                    <ScrollPane fx:id="accountHistory" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                       <content>
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="130.0" prefWidth="335.0" />
                                       </content>
@@ -287,12 +287,12 @@
                                   <RowConstraints maxHeight="29.0" minHeight="9.0" prefHeight="14.0" vgrow="SOMETIMES" />
                                 </rowConstraints>
                                  <children>
-                                    <Button alignment="CENTER" mnemonicParsing="false" prefHeight="47.0" prefWidth="173.0" text="Pay off loan" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                                    <Button fx:id="payoffLoanButton" alignment="CENTER" mnemonicParsing="false" prefHeight="47.0" prefWidth="173.0" text="Pay off loan" GridPane.columnIndex="3" GridPane.rowIndex="1">
                                        <font>
                                           <Font size="24.0" />
                                        </font>
                                     </Button>
-                                    <Button alignment="CENTER" mnemonicParsing="false" prefHeight="51.0" prefWidth="162.0" text="New loan" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                    <Button fx:id="newLoanButton" alignment="CENTER" mnemonicParsing="false" onAction="#onNewLoanButtonClick" prefHeight="51.0" prefWidth="162.0" text="New loan" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                        <font>
                                           <Font size="24.0" />
                                        </font>
@@ -315,7 +315,7 @@
                               <RowConstraints maxHeight="25.0" minHeight="10.0" prefHeight="13.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Button mnemonicParsing="false" prefHeight="37.0" prefWidth="225.0" text="Create new account" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                              <Button fx:id="createNewAccountButton" mnemonicParsing="false" onAction="#onCreateNewAccountClick" prefHeight="37.0" prefWidth="225.0" text="Create new account" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                  <font>
                                     <Font size="14.0" />
                                  </font>

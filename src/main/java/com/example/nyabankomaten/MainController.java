@@ -5,8 +5,10 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -22,7 +24,8 @@ public class MainController implements Initializable {
     List<Client> listOfClients = List.of(c1, c2);
     List<String> listOfAllAccounts = new ArrayList<>();
 
-
+    @FXML
+    private GridPane gridpane1;
     @FXML
     private Button addNewClient;
     @FXML
@@ -46,6 +49,8 @@ public class MainController implements Initializable {
     @FXML
     private Button withdraw;
     @FXML
+    private ScrollPane accountHistory;
+    @FXML
     private TextField addClientName;
     @FXML
     private TextField addClientSSC;
@@ -55,21 +60,16 @@ public class MainController implements Initializable {
     private TextField withdrawAmount;
 
     @FXML
-    private ScrollPane clientListPane;
-    @FXML
-    private ScrollPane accountListPane;
-    @FXML
     private ListView<String> listViewClient;
 
     @FXML
     private ListView<String> listViewAccounts;
 
-
     @FXML
-    protected void onSelectClientClick() {
-//        client = listOfClients.get();
-
+    protected void onNewLoanButtonClick(){
+        gridpane1.setVisible(true);
     }
+
 
     @FXML
     protected void onAddClientClick() {
@@ -80,11 +80,13 @@ public class MainController implements Initializable {
     @FXML
     protected void onDepositClick() {
         client.getAccount().get(listViewAccounts.getSelectionModel().getSelectedIndex()).deposit(Integer.parseInt(depositAmount.getText()));
+        client.getAccount().get(listViewAccounts.getSelectionModel().getSelectedIndex()).accountHistory.add("Deposit - " + depositAmount.getText() + "kr - " + LocalDateTime.now()+"\n");
     }
 
     @FXML
     protected void onWithdrawClick() {
-//        client.getAccount().get(accountListPane).withdraw(Integer.parseInt(withdrawAmount.getText()));
+        client.getAccount().get(listViewAccounts.getSelectionModel().getSelectedIndex()).withdraw(Integer.parseInt(withdrawAmount.getText()));
+        client.getAccount().get(listViewAccounts.getSelectionModel().getSelectedIndex()).accountHistory.add("Withdrawal - " + withdrawAmount.getText() + "kr - " + LocalDateTime.now()+"\n");
     }
 
     @FXML
@@ -103,7 +105,7 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-        for(Client c: listOfClients){
+        for (Client c : listOfClients) {
             listViewClient.getItems().add(c.getName() + "\t\t\t|\t" + c.getPersonNumber());
         }
         listViewClient.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
@@ -111,7 +113,7 @@ public class MainController implements Initializable {
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 client = listOfClients.get(listViewClient.getSelectionModel().getSelectedIndex());
                 listViewAccounts.getItems().clear();
-                for(Account a: client.getAccount()){
+                for (Account a : client.getAccount()) {
                     listViewAccounts.getItems().add(a.getAccountNumber() + "\t\t\t|\t" + a.getBalance());
                 }
                 System.out.println(client.getName());

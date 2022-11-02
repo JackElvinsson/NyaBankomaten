@@ -2,12 +2,15 @@ package com.example.nyabankomaten;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Account implements Printable {
 
     private String accountNumber;
     private int balance;
     private int loan;
+    List<String> accountHistory = new ArrayList<>();
     private Interest loanDetails;
     Path path = Paths.get("src/clients/accounts/"+getAccountNumber()+".txt");
     public Account(String accountNumber) {
