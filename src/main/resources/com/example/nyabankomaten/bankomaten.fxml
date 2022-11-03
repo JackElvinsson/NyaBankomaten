@@ -52,12 +52,12 @@
                                           <Font name="System Bold Italic" size="14.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="addClientSSC" prefHeight="32.0" prefWidth="200.0" promptText="Ex. Marston" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                                    <TextField fx:id="addClientSSC" prefHeight="32.0" prefWidth="200.0" promptText="Ex. 123456" GridPane.columnIndex="3" GridPane.rowIndex="2">
                                        <font>
                                           <Font size="14.0" />
                                        </font>
                                     </TextField>
-                                    <TextField fx:id="addClientName" prefHeight="31.0" prefWidth="200.0" promptText="Ex. John" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                                    <TextField fx:id="addClientName" prefHeight="31.0" prefWidth="200.0" promptText="Ex. John Marston" GridPane.columnIndex="3" GridPane.rowIndex="1">
                                        <font>
                                           <Font size="14.0" />
                                        </font>

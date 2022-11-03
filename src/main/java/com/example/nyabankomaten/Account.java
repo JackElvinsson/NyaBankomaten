@@ -49,10 +49,10 @@ public class Account implements Printable {
         balance -= loan;
         loan = 0;
     }
-    public void deposit(int deposit){
+    public void deposit(long deposit){
         balance += deposit;
     }
-    public void withdraw(int withdraw){
+    public void withdraw(long withdraw){
         if(withdraw <= balance){
             balance -= withdraw;
         }

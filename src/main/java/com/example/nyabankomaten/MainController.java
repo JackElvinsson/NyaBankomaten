@@ -27,10 +27,10 @@ public class MainController implements Initializable {
     Client c1 = new Client("Kalle", "123455677");
     Client c2 = new Client("Björne", "987456423");
 
-    //    List<Client> listOfClients = List.of(c1, c2);
+//    List<Client> listOfClients = List.of(c1, c2);
     List<Client> listOfClients = new ArrayList<>();
-    //    List<String> listOfAllAccounts = new ArrayList<>();
-    ObservableList<String> listOfAllAccounts = FXCollections.observableArrayList();
+//    List<String> listOfAllAccounts = new ArrayList<>();
+     ObservableList<String> listOfAllAccounts = FXCollections.observableArrayList();
     List<Interest> listOfLoanTypes = List.of(Interest.BUSINESS, Interest.HOUSE, Interest.EDUCATION, Interest.PERSONAL, Interest.VEHICLE);
 
     @FXML
@@ -161,7 +161,7 @@ public class MainController implements Initializable {
                 b = false;
             }
         }
-        if (b) {
+        if(b){
             if (addClientName.getText().isEmpty()) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setHeaderText("Please type in your name");
@@ -175,14 +175,19 @@ public class MainController implements Initializable {
                 listOfClients.add(client);
                 System.out.println(listOfClients.size());
                 System.out.println(listOfClients.get(listOfClients.size() - 1).getName());
-                listViewClient.getItems().clear();
-                for (Client c : listOfClients) {
-                    listViewClient.getItems().add(c.getName() + "\t\t\t|\t" + c.getPersonNumber());
+
+                //TODO LÖS FELET
+                try {
+                    listViewClient.getItems().clear();
+                    for (Client c : listOfClients) {
+                        listViewClient.getItems().add(c.getName() + "\t\t\t|\t" + c.getPersonNumber());
+                    }
+                } catch (IndexOutOfBoundsException ignored) {
                 }
             }
+            addClientName.setText("");
+            addClientSSC.setText("");
         }
-        addClientName.setText("");
-        addClientSSC.setText("");
     }
 
     @FXML
@@ -199,7 +204,7 @@ public class MainController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("No accounts available");
             alert.show();
-        } catch (NumberFormatException e) {
+        }catch (NumberFormatException e){
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("Value has to be a number");
             alert.show();
@@ -218,8 +223,8 @@ public class MainController implements Initializable {
     @FXML
     protected void onWithdrawClick() {
         try {
-            account.withdraw(Integer.parseInt(withdrawAmount.getText()));
-            account.accountHistory.add("Withdrawal - " + withdrawAmount.getText() + "kr - " + LocalDateTime.now().format(formatter));
+            client.getAccount().get(listViewAccounts.getSelectionModel().getSelectedIndex()).withdraw(Integer.parseInt(withdrawAmount.getText()));
+            client.getAccount().get(listViewAccounts.getSelectionModel().getSelectedIndex()).accountHistory.add("Withdrawal - " + withdrawAmount.getText() + "kr - " + LocalDateTime.now() + "\n");
         } catch (IndexOutOfBoundsException e) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("No account selected");
@@ -228,7 +233,7 @@ public class MainController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("No accounts available");
             alert.show();
-        } catch (NumberFormatException e) {
+        }catch (NumberFormatException e){
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("Value has to be a number");
             alert.show();
@@ -260,9 +265,14 @@ public class MainController implements Initializable {
             alert.setHeaderText("No clients available");
             alert.show();
         }
-        listViewAccounts.getItems().clear();
-        for (Account ac : client.getAccount()) {
-            listViewAccounts.getItems().add(ac.getAccountNumber() + "\t\t\t|\t" + ac.getBalance());
+
+        //TODO LÖS FELET
+        try {
+            listViewAccounts.getItems().clear();
+            for (Account ac : client.getAccount()) {
+                listViewAccounts.getItems().add(ac.getAccountNumber() + "\t\t\t|\t" + ac.getBalance());
+            }
+        } catch (IndexOutOfBoundsException ignored) {
         }
         currentLoans.getItems().clear();
         currentLoans.getItems().add(account.getLoanDetails().type +" - " + account.getLoan() + " " + account.getLoanDetails().interest);
@@ -284,9 +294,13 @@ public class MainController implements Initializable {
 //            alert.setHeaderText("No clients available");
 //            alert.show();
         }
-        listViewClient.getItems().clear();
-        for (Client c : listOfClients) {
-            listViewClient.getItems().add(c.getName() + "\t\t\t|\t" + c.getPersonNumber());
+        //TODO LÖS FELET
+        try {
+            listViewClient.getItems().clear();
+            for (Client c : listOfClients) {
+                listViewClient.getItems().add(c.getName() + "\t\t\t|\t" + c.getPersonNumber());
+            }
+        } catch (IndexOutOfBoundsException ignored) {
         }
         currentLoans.getItems().clear();
         currentLoans.getItems().add(account.getLoanDetails().type +" - " + account.getLoan() + " " + account.getLoanDetails().interest);
@@ -304,9 +318,14 @@ public class MainController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 client = listOfClients.get(listViewClient.getSelectionModel().getSelectedIndex());
-                listViewAccounts.getItems().clear();
-                for (Account a : client.getAccount()) {
-                    listViewAccounts.getItems().add(a.getAccountNumber() + "\t\t\t|\t" + a.getBalance());
+
+                //TODO LÖS FELET
+                try {
+                    listViewAccounts.getItems().clear();
+                    for (Account a : client.getAccount()) {
+                        listViewAccounts.getItems().add(a.getAccountNumber() + "\t\t\t|\t" + a.getBalance());
+                    }
+                } catch (IndexOutOfBoundsException ignored) {
                 }
                 historyText.clear();
                 currentLoans.getItems().clear();
