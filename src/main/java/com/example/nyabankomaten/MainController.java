@@ -21,8 +21,10 @@ public class MainController implements Initializable {
     Client c1 = new Client("Kalle", "123455677");
     Client c2 = new Client("Björne", "987456423");
 
-    List<Client> listOfClients = List.of(c1, c2);
+//    List<Client> listOfClients = List.of(c1, c2);
+    List<Client> listOfClients = new ArrayList<>();
     List<String> listOfAllAccounts = new ArrayList<>();
+    List<Interest> listOfLoanTypes = List.of(Interest.BUSINESS, Interest.HOUSE, Interest.EDUCATION, Interest.PERSONAL, Interest.VEHICLE);
 
     @FXML
     private GridPane gridpane1;
@@ -34,6 +36,8 @@ public class MainController implements Initializable {
     private Label accounts;
     @FXML
     private Label accountName;
+    @FXML
+    private TextField loanAmountField;
     @FXML
     private Button addClientButton;
     @FXML
@@ -48,6 +52,10 @@ public class MainController implements Initializable {
     private Button deposit;
     @FXML
     private Button withdraw;
+    @FXML
+    private Button cancelButton;
+    @FXML
+    private Button applyForLoanButton;
     @FXML
     private ScrollPane accountHistory;
     @FXML
@@ -64,6 +72,12 @@ public class MainController implements Initializable {
 
     @FXML
     private ListView<String> listViewAccounts;
+    @FXML
+    private ComboBox<String> loanTypeBox;
+    @FXML
+    protected void onCancelButtonClick(){
+        gridpane1.setVisible(false);
+    }
 
     @FXML
     protected void onNewLoanButtonClick() {
@@ -75,6 +89,8 @@ public class MainController implements Initializable {
     protected void onAddClientClick() {
         Client client = new AddClient(addClientName.getText(), addClientSSC.getText());
         listOfClients.add(client);
+        System.out.println(listOfClients.size());
+        System.out.println(listOfClients.get(listOfClients.size()-1).getName());
     }
 
     @FXML
@@ -130,6 +146,9 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
+        for(Interest i: listOfLoanTypes){
+            loanTypeBox.getItems().add(i.type);
+        }
         for (Client c : listOfClients) {
             listViewClient.getItems().add(c.getName() + "\t\t\t|\t" + c.getPersonNumber());
         }
