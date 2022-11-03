@@ -48,6 +48,7 @@ public class Account implements Printable {
     public void payLoan(){
         balance -= loan;
         loan = 0;
+        loanDetails = Interest.NONE;
     }
     public void deposit(long deposit){
         balance += deposit;
