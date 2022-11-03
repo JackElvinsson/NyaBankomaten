@@ -320,7 +320,7 @@
                                     <Font size="14.0" />
                                  </font>
                               </Button>
-                              <Button mnemonicParsing="false" prefHeight="38.0" prefWidth="225.0" text="Remove client" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                              <Button fx:id="removeClientButton" mnemonicParsing="false" onAction="#onRemoveClientClick" prefHeight="38.0" prefWidth="225.0" text="Remove client" GridPane.columnIndex="1" GridPane.rowIndex="3">
                                  <font>
                                     <Font size="14.0" />
                                  </font>

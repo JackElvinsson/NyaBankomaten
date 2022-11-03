@@ -2,6 +2,9 @@ package com.example.nyabankomaten;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -21,9 +24,10 @@ public class MainController implements Initializable {
     Client c1 = new Client("Kalle", "123455677");
     Client c2 = new Client("Björne", "987456423");
 
-//    List<Client> listOfClients = List.of(c1, c2);
-    List<Client> listOfClients = new ArrayList<>();
-    List<String> listOfAllAccounts = new ArrayList<>();
+    List<Client> listOfClients = List.of(c1, c2);
+//    List<Client> listOfClients = new ArrayList<>();
+//    List<String> listOfAllAccounts = new ArrayList<>();
+     ObservableList<String> listOfAllAccounts = FXCollections.observableArrayList();
     List<Interest> listOfLoanTypes = List.of(Interest.BUSINESS, Interest.HOUSE, Interest.EDUCATION, Interest.PERSONAL, Interest.VEHICLE);
 
     @FXML
@@ -109,7 +113,7 @@ public class MainController implements Initializable {
     protected void onCreateNewAccountClick() {
         Account a = new Account(l.getNewAccountNumber(listOfAllAccounts));
         client.addAccount(a);
-        listViewAccounts.refresh();
+        System.out.println("createnewaccount");
     }
 
     //Funkar ej
@@ -136,6 +140,16 @@ public class MainController implements Initializable {
                     listViewAccounts.getItems().add(a.getAccountNumber() + "\t\t\t|\t" + a.getBalance());
                 }
                 System.out.println(client.getName());
+            }
+        });
+        listOfAllAccounts.addListener(new ListChangeListener<String>() {
+            @Override
+            public void onChanged(Change<? extends String> change) {
+                listViewAccounts.getItems().clear();
+                System.out.println("listener");
+                for (Account a : client.getAccount()) {
+                    listViewAccounts.getItems().add(a.getAccountNumber() + "\t\t\t|\t" + a.getBalance());
+                }
             }
         });
     }
