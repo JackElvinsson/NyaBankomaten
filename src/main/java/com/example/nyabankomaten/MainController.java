@@ -21,7 +21,7 @@ public class MainController implements Initializable {
     Client c1 = new Client("Kalle", "123455677");
     Client c2 = new Client("Björne", "987456423");
 
-//    List<Client> listOfClients = List.of(c1, c2);
+    //    List<Client> listOfClients = List.of(c1, c2);
     List<Client> listOfClients = new ArrayList<>();
     List<String> listOfAllAccounts = new ArrayList<>();
     List<Interest> listOfLoanTypes = List.of(Interest.BUSINESS, Interest.HOUSE, Interest.EDUCATION, Interest.PERSONAL, Interest.VEHICLE);
@@ -74,8 +74,9 @@ public class MainController implements Initializable {
     private ListView<String> listViewAccounts;
     @FXML
     private ComboBox<String> loanTypeBox;
+
     @FXML
-    protected void onCancelButtonClick(){
+    protected void onCancelButtonClick() {
         gridpane1.setVisible(false);
     }
 
@@ -87,10 +88,20 @@ public class MainController implements Initializable {
 
     @FXML
     protected void onAddClientClick() {
-        Client client = new AddClient(addClientName.getText(), addClientSSC.getText());
-        listOfClients.add(client);
-        System.out.println(listOfClients.size());
-        System.out.println(listOfClients.get(listOfClients.size()-1).getName());
+        if (addClientName.getText().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("Please type in your name");
+            alert.show();
+        } else if (addClientSSC.getText().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("Please type in your SSC (social security number)");
+            alert.show();
+        } else {
+            Client client = new AddClient(addClientName.getText(), addClientSSC.getText());
+            listOfClients.add(client);
+            System.out.println(listOfClients.size());
+            System.out.println(listOfClients.get(listOfClients.size() - 1).getName());
+        }
     }
 
     @FXML
@@ -100,14 +111,12 @@ public class MainController implements Initializable {
             client.getAccount().get(listViewAccounts.getSelectionModel().getSelectedIndex()).accountHistory.add("Deposit - " + depositAmount.getText() + "kr - " + LocalDateTime.now() + "\n");
 
         } catch (IndexOutOfBoundsException e) {
-            Alert alert = new Alert(Alert.AlertType.NONE);
-            alert.setContentText("No account selected");
-            alert.setAlertType(Alert.AlertType.ERROR);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("No account selected");
             alert.show();
         } catch (NullPointerException e) {
-            Alert alert = new Alert(Alert.AlertType.NONE);
-            alert.setContentText("No accounts available");
-            alert.setAlertType(Alert.AlertType.ERROR);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("No accounts available");
             alert.show();
         }
     }
@@ -118,35 +127,57 @@ public class MainController implements Initializable {
             client.getAccount().get(listViewAccounts.getSelectionModel().getSelectedIndex()).withdraw(Integer.parseInt(withdrawAmount.getText()));
             client.getAccount().get(listViewAccounts.getSelectionModel().getSelectedIndex()).accountHistory.add("Withdrawal - " + withdrawAmount.getText() + "kr - " + LocalDateTime.now() + "\n");
         } catch (IndexOutOfBoundsException e) {
-            Alert alert = new Alert(Alert.AlertType.NONE);
-            alert.setContentText("No account selected");
-            alert.setAlertType(Alert.AlertType.ERROR);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("No account selected");
             alert.show();
         } catch (NullPointerException e) {
-            Alert alert = new Alert(Alert.AlertType.NONE);
-            alert.setContentText("No accounts available");
-            alert.setAlertType(Alert.AlertType.ERROR);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("No accounts available");
             alert.show();
         }
     }
 
     @FXML
     protected void onCreateNewAccountClick() {
+
         Account a = new Account(l.getNewAccountNumber(listOfAllAccounts));
-        client.addAccount(a);
-        listViewAccounts.refresh();
+
+        try {
+            client.addAccount(a);
+            listViewAccounts.refresh();
+
+        } catch (IndexOutOfBoundsException e) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("No client selected");
+            alert.show();
+        } catch (NullPointerException e) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("No clients available");
+            alert.show();
+        }
     }
 
-    //Funkar ej
     @FXML
     protected void onRemoveClientClick() {
-        listOfClients.remove(listViewClient.getSelectionModel().getSelectedIndex());
-        listViewClient.getItems().remove(listViewClient.getSelectionModel().getSelectedIndex());
+
+        try {
+            listOfClients.remove(listViewClient.getSelectionModel().getSelectedIndex());
+            listViewClient.getItems().remove(listViewClient.getSelectionModel().getSelectedIndex());
+
+        } catch (IndexOutOfBoundsException e) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("No client selected");
+            alert.show();
+//        } catch (NullPointerException e) {
+//            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//            alert.setHeaderText("No clients available");
+//            alert.show();
+        }
     }
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-        for(Interest i: listOfLoanTypes){
+        for (Interest i : listOfLoanTypes) {
             loanTypeBox.getItems().add(i.type);
         }
         for (Client c : listOfClients) {
