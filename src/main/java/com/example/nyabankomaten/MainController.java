@@ -12,22 +12,25 @@ import javafx.scene.layout.GridPane;
 
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     Client client;
     Account account;
+    Interest loantype;
     Lists l = new Lists();
 
     Client c1 = new Client("Kalle", "123455677");
     Client c2 = new Client("Björne", "987456423");
 
-//    List<Client> listOfClients = List.of(c1, c2);
+    //    List<Client> listOfClients = List.of(c1, c2);
     List<Client> listOfClients = new ArrayList<>();
-//    List<String> listOfAllAccounts = new ArrayList<>();
-     ObservableList<String> listOfAllAccounts = FXCollections.observableArrayList();
+    //    List<String> listOfAllAccounts = new ArrayList<>();
+    ObservableList<String> listOfAllAccounts = FXCollections.observableArrayList();
     List<Interest> listOfLoanTypes = List.of(Interest.BUSINESS, Interest.HOUSE, Interest.EDUCATION, Interest.PERSONAL, Interest.VEHICLE);
 
     @FXML
@@ -77,15 +80,73 @@ public class MainController implements Initializable {
     @FXML
     private ListView<String> listViewAccounts;
     @FXML
+    private ListView<String> currentLoans;
+    @FXML
     private ComboBox<String> loanTypeBox;
+    @FXML
+    private TextArea historyText;
+
     @FXML
     protected void onCancelButtonClick() {
         gridpane1.setVisible(false);
+        currentLoans.getItems().clear();
+        currentLoans.getItems().add(account.getLoanDetails().type +" - " + account.getLoan() + " " + account.getLoanDetails().interest);
     }
 
     @FXML
     protected void onNewLoanButtonClick() {
         gridpane1.setVisible(true);
+        currentLoans.getItems().clear();
+        currentLoans.getItems().add(account.getLoanDetails().type +" - " + account.getLoan() + " " + account.getLoanDetails().interest);
+    }
+    @FXML
+    protected void onPayOffClick(){
+        if(account.getBalance() >= account.getLoan()){
+            account.accountHistory.add("Paid off "+ account.getLoanDetails() + " loan -"+ account.getLoan() + "kr - " + LocalDateTime.now().format(formatter));
+            account.payLoan();
+            listViewAccounts.getItems().clear();
+            for (Account ac : client.getAccount()) {
+                listViewAccounts.getItems().add(ac.getAccountNumber() + "\t\t\t|\t" + ac.getBalance());
+            }
+            historyText.clear();
+            for (String str : account.accountHistory) {
+                historyText.setText(historyText.getText() + str + "\n");
+            }
+            currentLoans.getItems().clear();
+            currentLoans.getItems().add(account.getLoanDetails().type +" - " + account.getLoan() + " " + account.getLoanDetails().interest);
+
+        }
+        else{
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("Not enough funds in account");
+            alert.show();
+        }
+    }
+
+    @FXML
+    protected void onApplyButtonClick() {
+        if (account.getLoan() == 0) {
+            loantype = listOfLoanTypes.get(loanTypeBox.getSelectionModel().getSelectedIndex());
+            long loanAmount = Long.parseLong(loanAmountField.getText().trim());
+            account.newLoan(loanAmount);
+            account.setLoanDetails(loantype);
+            account.accountHistory.add(loantype.type + " loan "+ loanAmount + "kr - " + LocalDateTime.now().format(formatter));
+            account.setBalance(loanAmount);
+            listViewAccounts.getItems().clear();
+            for (Account ac : client.getAccount()) {
+                listViewAccounts.getItems().add(ac.getAccountNumber() + "\t\t\t|\t" + ac.getBalance());
+            }
+            historyText.clear();
+            for (String str : account.accountHistory) {
+                historyText.setText(historyText.getText() + str + "\n");
+            }
+            gridpane1.setVisible(false);
+        }
+        else{
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("Account already has a loan");
+            alert.show();
+        }
     }
 
 
@@ -100,7 +161,7 @@ public class MainController implements Initializable {
                 b = false;
             }
         }
-        if(b){
+        if (b) {
             if (addClientName.getText().isEmpty()) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setHeaderText("Please type in your name");
@@ -127,8 +188,8 @@ public class MainController implements Initializable {
     @FXML
     protected void onDepositClick() {
         try {
-            client.getAccount().get(listViewAccounts.getSelectionModel().getSelectedIndex()).deposit(Integer.parseInt(depositAmount.getText()));
-            client.getAccount().get(listViewAccounts.getSelectionModel().getSelectedIndex()).accountHistory.add("Deposit - " + depositAmount.getText() + "kr - " + LocalDateTime.now() + "\n");
+            account.deposit(Integer.parseInt(depositAmount.getText()));
+            account.accountHistory.add("Deposit - " + depositAmount.getText() + "kr - " + LocalDateTime.now().format(formatter));
 
         } catch (IndexOutOfBoundsException e) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -138,7 +199,7 @@ public class MainController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("No accounts available");
             alert.show();
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("Value has to be a number");
             alert.show();
@@ -148,13 +209,17 @@ public class MainController implements Initializable {
             listViewAccounts.getItems().add(ac.getAccountNumber() + "\t\t\t|\t" + ac.getBalance());
         }
         depositAmount.setText("");
+        historyText.clear();
+        for (String str : account.accountHistory) {
+            historyText.setText(historyText.getText() + str + "\n");
+        }
     }
 
     @FXML
     protected void onWithdrawClick() {
         try {
-            client.getAccount().get(listViewAccounts.getSelectionModel().getSelectedIndex()).withdraw(Integer.parseInt(withdrawAmount.getText()));
-            client.getAccount().get(listViewAccounts.getSelectionModel().getSelectedIndex()).accountHistory.add("Withdrawal - " + withdrawAmount.getText() + "kr - " + LocalDateTime.now() + "\n");
+            account.withdraw(Integer.parseInt(withdrawAmount.getText()));
+            account.accountHistory.add("Withdrawal - " + withdrawAmount.getText() + "kr - " + LocalDateTime.now().format(formatter));
         } catch (IndexOutOfBoundsException e) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("No account selected");
@@ -163,7 +228,7 @@ public class MainController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("No accounts available");
             alert.show();
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("Value has to be a number");
             alert.show();
@@ -173,6 +238,10 @@ public class MainController implements Initializable {
             listViewAccounts.getItems().add(ac.getAccountNumber() + "\t\t\t|\t" + ac.getBalance());
         }
         withdrawAmount.setText("");
+        historyText.clear();
+        for (String str : account.accountHistory) {
+            historyText.setText(historyText.getText() + str + "\n");
+        }
     }
 
     @FXML
@@ -195,6 +264,8 @@ public class MainController implements Initializable {
         for (Account ac : client.getAccount()) {
             listViewAccounts.getItems().add(ac.getAccountNumber() + "\t\t\t|\t" + ac.getBalance());
         }
+        currentLoans.getItems().clear();
+        currentLoans.getItems().add(account.getLoanDetails().type +" - " + account.getLoan() + " " + account.getLoanDetails().interest);
     }
 
     @FXML
@@ -217,6 +288,8 @@ public class MainController implements Initializable {
         for (Client c : listOfClients) {
             listViewClient.getItems().add(c.getName() + "\t\t\t|\t" + c.getPersonNumber());
         }
+        currentLoans.getItems().clear();
+        currentLoans.getItems().add(account.getLoanDetails().type +" - " + account.getLoan() + " " + account.getLoanDetails().interest);
     }
 
     @Override
@@ -235,6 +308,20 @@ public class MainController implements Initializable {
                 for (Account a : client.getAccount()) {
                     listViewAccounts.getItems().add(a.getAccountNumber() + "\t\t\t|\t" + a.getBalance());
                 }
+                historyText.clear();
+                currentLoans.getItems().clear();
+            }
+        });
+        listViewAccounts.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                account = client.getAccount().get(listViewAccounts.getSelectionModel().getSelectedIndex());
+                historyText.clear();
+                for (String str : account.accountHistory) {
+                    historyText.setText(historyText.getText() + str + "\n");
+                }
+                currentLoans.getItems().clear();
+                currentLoans.getItems().add(account.getLoanDetails().type +" - " + account.getLoan() + " " + account.getLoanDetails().interest);
             }
         });
 //        listOfAllAccounts.addListener(new ListChangeListener<String>() {

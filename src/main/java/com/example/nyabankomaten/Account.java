@@ -8,8 +8,8 @@ import java.util.List;
 public class Account implements Printable {
 
     private String accountNumber;
-    private int balance;
-    private int loan;
+    private long balance;
+    private long loan;
     List<String> accountHistory = new ArrayList<>();
     private Interest loanDetails;
     Path path = Paths.get("src/clients/accounts/"+getAccountNumber()+".txt");
@@ -19,7 +19,7 @@ public class Account implements Printable {
         this.loan = 0;
         this.loanDetails = Interest.NONE;
     }
-    public Account(String accountNumber, int balance, int loan, Interest loanDetails){
+    public Account(String accountNumber, long balance, long loan, Interest loanDetails){
         this.accountNumber = accountNumber;
         this.balance = balance;
         this.loan = loan;
@@ -38,12 +38,16 @@ public class Account implements Printable {
         this.loanDetails = loanDetails;
     }
 
-    public int getBalance() {
+    public long getBalance() {
         return balance;
     }
 
-    public void setBalance(int balance) {
-        this.balance = balance;
+    public void setBalance(long balance) {
+        this.balance += balance;
+    }
+    public void payLoan(){
+        balance -= loan;
+        loan = 0;
     }
     public void deposit(int deposit){
         balance += deposit;
@@ -58,12 +62,9 @@ public class Account implements Printable {
         return loan * loanDetails.interest;
     }
 
-    public void setLoan(int loan) {
+
+    public void newLoan(long loan){
         this.loan = loan;
-    }
-
-    public void newLoan(int loan){
-
     }
 
     @Override
