@@ -2,9 +2,6 @@ package com.example.nyabankomaten;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -79,53 +76,108 @@ public class MainController implements Initializable {
     @FXML
     private ComboBox<String> loanTypeBox;
     @FXML
-    protected void onCancelButtonClick(){
+    protected void onCancelButtonClick() {
         gridpane1.setVisible(false);
     }
 
     @FXML
-    protected void onNewLoanButtonClick(){
+    protected void onNewLoanButtonClick() {
         gridpane1.setVisible(true);
     }
 
 
     @FXML
     protected void onAddClientClick() {
-        Client client = new AddClient(addClientName.getText(), addClientSSC.getText());
-        listOfClients.add(client);
-        System.out.println(listOfClients.size());
-        System.out.println(listOfClients.get(listOfClients.size()-1).getName());
+        if (addClientName.getText().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("Please type in your name");
+            alert.show();
+        } else if (addClientSSC.getText().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("Please type in your SSC (social security number)");
+            alert.show();
+        } else {
+            Client client = new AddClient(addClientName.getText(), addClientSSC.getText());
+            listOfClients.add(client);
+            System.out.println(listOfClients.size());
+            System.out.println(listOfClients.get(listOfClients.size() - 1).getName());
+        }
     }
 
     @FXML
     protected void onDepositClick() {
-        client.getAccount().get(listViewAccounts.getSelectionModel().getSelectedIndex()).deposit(Integer.parseInt(depositAmount.getText()));
-        client.getAccount().get(listViewAccounts.getSelectionModel().getSelectedIndex()).accountHistory.add("Deposit - " + depositAmount.getText() + "kr - " + LocalDateTime.now()+"\n");
+        try {
+            client.getAccount().get(listViewAccounts.getSelectionModel().getSelectedIndex()).deposit(Integer.parseInt(depositAmount.getText()));
+            client.getAccount().get(listViewAccounts.getSelectionModel().getSelectedIndex()).accountHistory.add("Deposit - " + depositAmount.getText() + "kr - " + LocalDateTime.now() + "\n");
+
+        } catch (IndexOutOfBoundsException e) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("No account selected");
+            alert.show();
+        } catch (NullPointerException e) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("No accounts available");
+            alert.show();
+        }
     }
 
     @FXML
     protected void onWithdrawClick() {
-        client.getAccount().get(listViewAccounts.getSelectionModel().getSelectedIndex()).withdraw(Integer.parseInt(withdrawAmount.getText()));
-        client.getAccount().get(listViewAccounts.getSelectionModel().getSelectedIndex()).accountHistory.add("Withdrawal - " + withdrawAmount.getText() + "kr - " + LocalDateTime.now()+"\n");
+        try {
+            client.getAccount().get(listViewAccounts.getSelectionModel().getSelectedIndex()).withdraw(Integer.parseInt(withdrawAmount.getText()));
+            client.getAccount().get(listViewAccounts.getSelectionModel().getSelectedIndex()).accountHistory.add("Withdrawal - " + withdrawAmount.getText() + "kr - " + LocalDateTime.now() + "\n");
+        } catch (IndexOutOfBoundsException e) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("No account selected");
+            alert.show();
+        } catch (NullPointerException e) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("No accounts available");
+            alert.show();
+        }
     }
 
     @FXML
     protected void onCreateNewAccountClick() {
         Account a = new Account(l.getNewAccountNumber(listOfAllAccounts));
-        client.addAccount(a);
         System.out.println("createnewaccount");
+
+        try {
+            client.addAccount(a);
+            listViewAccounts.refresh();
+
+        } catch (IndexOutOfBoundsException e) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("No client selected");
+            alert.show();
+        } catch (NullPointerException e) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("No clients available");
+            alert.show();
+        }
     }
 
-    //Funkar ej
     @FXML
     protected void onRemoveClientClick() {
-        listOfClients.remove(listViewClient.getSelectionModel().getSelectedIndex());
-        listViewClient.getItems().remove(listViewClient.getSelectionModel().getSelectedIndex());
+
+        try {
+            listOfClients.remove(listViewClient.getSelectionModel().getSelectedIndex());
+            listViewClient.getItems().remove(listViewClient.getSelectionModel().getSelectedIndex());
+
+        } catch (IndexOutOfBoundsException e) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("No client selected");
+            alert.show();
+//        } catch (NullPointerException e) {
+//            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//            alert.setHeaderText("No clients available");
+//            alert.show();
+        }
     }
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-        for(Interest i: listOfLoanTypes){
+        for (Interest i : listOfLoanTypes) {
             loanTypeBox.getItems().add(i.type);
         }
         for (Client c : listOfClients) {
