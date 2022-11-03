@@ -66,7 +66,7 @@ public class MainController implements Initializable {
     private ListView<String> listViewAccounts;
 
     @FXML
-    protected void onNewLoanButtonClick(){
+    protected void onNewLoanButtonClick() {
         gridpane1.setVisible(true);
     }
 
@@ -79,14 +79,39 @@ public class MainController implements Initializable {
 
     @FXML
     protected void onDepositClick() {
-        client.getAccount().get(listViewAccounts.getSelectionModel().getSelectedIndex()).deposit(Integer.parseInt(depositAmount.getText()));
-        client.getAccount().get(listViewAccounts.getSelectionModel().getSelectedIndex()).accountHistory.add("Deposit - " + depositAmount.getText() + "kr - " + LocalDateTime.now()+"\n");
+        try {
+            client.getAccount().get(listViewAccounts.getSelectionModel().getSelectedIndex()).deposit(Integer.parseInt(depositAmount.getText()));
+            client.getAccount().get(listViewAccounts.getSelectionModel().getSelectedIndex()).accountHistory.add("Deposit - " + depositAmount.getText() + "kr - " + LocalDateTime.now() + "\n");
+
+        } catch (IndexOutOfBoundsException e) {
+            Alert alert = new Alert(Alert.AlertType.NONE);
+            alert.setContentText("No account selected");
+            alert.setAlertType(Alert.AlertType.ERROR);
+            alert.show();
+        } catch (NullPointerException e) {
+            Alert alert = new Alert(Alert.AlertType.NONE);
+            alert.setContentText("No accounts available");
+            alert.setAlertType(Alert.AlertType.ERROR);
+            alert.show();
+        }
     }
 
     @FXML
     protected void onWithdrawClick() {
-        client.getAccount().get(listViewAccounts.getSelectionModel().getSelectedIndex()).withdraw(Integer.parseInt(withdrawAmount.getText()));
-        client.getAccount().get(listViewAccounts.getSelectionModel().getSelectedIndex()).accountHistory.add("Withdrawal - " + withdrawAmount.getText() + "kr - " + LocalDateTime.now()+"\n");
+        try {
+            client.getAccount().get(listViewAccounts.getSelectionModel().getSelectedIndex()).withdraw(Integer.parseInt(withdrawAmount.getText()));
+            client.getAccount().get(listViewAccounts.getSelectionModel().getSelectedIndex()).accountHistory.add("Withdrawal - " + withdrawAmount.getText() + "kr - " + LocalDateTime.now() + "\n");
+        } catch (IndexOutOfBoundsException e) {
+            Alert alert = new Alert(Alert.AlertType.NONE);
+            alert.setContentText("No account selected");
+            alert.setAlertType(Alert.AlertType.ERROR);
+            alert.show();
+        } catch (NullPointerException e) {
+            Alert alert = new Alert(Alert.AlertType.NONE);
+            alert.setContentText("No accounts available");
+            alert.setAlertType(Alert.AlertType.ERROR);
+            alert.show();
+        }
     }
 
     @FXML
