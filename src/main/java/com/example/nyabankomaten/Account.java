@@ -38,17 +38,17 @@ public class Account implements Printable {
         this.loanDetails = loanDetails;
     }
 
-    public int getBalance() {
+    public long getBalance() {
         return balance;
     }
 
     public void setBalance(int balance) {
         this.balance = balance;
     }
-    public void deposit(int deposit){
+    public void deposit(long deposit){
         balance += deposit;
     }
-    public void withdraw(int withdraw){
+    public void withdraw(long withdraw){
         if(withdraw <= balance){
             balance -= withdraw;
         }
