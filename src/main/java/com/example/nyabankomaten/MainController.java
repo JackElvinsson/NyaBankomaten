@@ -24,8 +24,8 @@ public class MainController implements Initializable {
     Client c1 = new Client("Kalle", "123455677");
     Client c2 = new Client("Björne", "987456423");
 
-    List<Client> listOfClients = List.of(c1, c2);
-//    List<Client> listOfClients = new ArrayList<>();
+//    List<Client> listOfClients = List.of(c1, c2);
+    List<Client> listOfClients = new ArrayList<>();
 //    List<String> listOfAllAccounts = new ArrayList<>();
      ObservableList<String> listOfAllAccounts = FXCollections.observableArrayList();
     List<Interest> listOfLoanTypes = List.of(Interest.BUSINESS, Interest.HOUSE, Interest.EDUCATION, Interest.PERSONAL, Interest.VEHICLE);
@@ -91,20 +91,37 @@ public class MainController implements Initializable {
 
     @FXML
     protected void onAddClientClick() {
-        if (addClientName.getText().isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setHeaderText("Please type in your name");
-            alert.show();
-        } else if (addClientSSC.getText().isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setHeaderText("Please type in your SSC (social security number)");
-            alert.show();
-        } else {
-            Client client = new AddClient(addClientName.getText(), addClientSSC.getText());
-            listOfClients.add(client);
-            System.out.println(listOfClients.size());
-            System.out.println(listOfClients.get(listOfClients.size() - 1).getName());
+        boolean b = true;
+        for (Client listOfClient : listOfClients) {
+            if (listOfClient.getPersonNumber().trim().equals(addClientSSC.getText().trim())) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setHeaderText("Client already exists");
+                alert.show();
+                b = false;
+            }
         }
+        if(b){
+            if (addClientName.getText().isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setHeaderText("Please type in your name");
+                alert.show();
+            } else if (addClientSSC.getText().isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setHeaderText("Please type in your SSC (social security number)");
+                alert.show();
+            } else {
+                Client client = new AddClient(addClientName.getText(), addClientSSC.getText());
+                listOfClients.add(client);
+                System.out.println(listOfClients.size());
+                System.out.println(listOfClients.get(listOfClients.size() - 1).getName());
+                listViewClient.getItems().clear();
+                for (Client c : listOfClients) {
+                    listViewClient.getItems().add(c.getName() + "\t\t\t|\t" + c.getPersonNumber());
+                }
+            }
+        }
+        addClientName.setText("");
+        addClientSSC.setText("");
     }
 
     @FXML
@@ -121,7 +138,16 @@ public class MainController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("No accounts available");
             alert.show();
+        }catch (NumberFormatException e){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("Value has to be a number");
+            alert.show();
         }
+        listViewAccounts.getItems().clear();
+        for (Account ac : client.getAccount()) {
+            listViewAccounts.getItems().add(ac.getAccountNumber() + "\t\t\t|\t" + ac.getBalance());
+        }
+        depositAmount.setText("");
     }
 
     @FXML
@@ -137,17 +163,24 @@ public class MainController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("No accounts available");
             alert.show();
+        }catch (NumberFormatException e){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("Value has to be a number");
+            alert.show();
         }
+        listViewAccounts.getItems().clear();
+        for (Account ac : client.getAccount()) {
+            listViewAccounts.getItems().add(ac.getAccountNumber() + "\t\t\t|\t" + ac.getBalance());
+        }
+        withdrawAmount.setText("");
     }
 
     @FXML
     protected void onCreateNewAccountClick() {
         Account a = new Account(l.getNewAccountNumber(listOfAllAccounts));
-        System.out.println("createnewaccount");
 
         try {
             client.addAccount(a);
-            listViewAccounts.refresh();
 
         } catch (IndexOutOfBoundsException e) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -157,6 +190,10 @@ public class MainController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("No clients available");
             alert.show();
+        }
+        listViewAccounts.getItems().clear();
+        for (Account ac : client.getAccount()) {
+            listViewAccounts.getItems().add(ac.getAccountNumber() + "\t\t\t|\t" + ac.getBalance());
         }
     }
 
@@ -176,6 +213,10 @@ public class MainController implements Initializable {
 //            alert.setHeaderText("No clients available");
 //            alert.show();
         }
+        listViewClient.getItems().clear();
+        for (Client c : listOfClients) {
+            listViewClient.getItems().add(c.getName() + "\t\t\t|\t" + c.getPersonNumber());
+        }
     }
 
     @Override
@@ -183,9 +224,9 @@ public class MainController implements Initializable {
         for (Interest i : listOfLoanTypes) {
             loanTypeBox.getItems().add(i.type);
         }
-        for (Client c : listOfClients) {
-            listViewClient.getItems().add(c.getName() + "\t\t\t|\t" + c.getPersonNumber());
-        }
+//        for (Client c : listOfClients) {
+//            listViewClient.getItems().add(c.getName() + "\t\t\t|\t" + c.getPersonNumber());
+//        }
         listViewClient.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
@@ -194,18 +235,17 @@ public class MainController implements Initializable {
                 for (Account a : client.getAccount()) {
                     listViewAccounts.getItems().add(a.getAccountNumber() + "\t\t\t|\t" + a.getBalance());
                 }
-                System.out.println(client.getName());
             }
         });
-        listOfAllAccounts.addListener(new ListChangeListener<String>() {
-            @Override
-            public void onChanged(Change<? extends String> change) {
-                listViewAccounts.getItems().clear();
-                System.out.println("listener");
-                for (Account a : client.getAccount()) {
-                    listViewAccounts.getItems().add(a.getAccountNumber() + "\t\t\t|\t" + a.getBalance());
-                }
-            }
-        });
+//        listOfAllAccounts.addListener(new ListChangeListener<String>() {
+//            @Override
+//            public void onChanged(Change<? extends String> change) {
+//                listViewAccounts.getItems().clear();
+//                System.out.println("listener");
+//                for (Account a : client.getAccount()) {
+//                    listViewAccounts.getItems().add(a.getAccountNumber() + "\t\t\t|\t" + a.getBalance());
+//                }
+//            }
+//        });
     }
 }
