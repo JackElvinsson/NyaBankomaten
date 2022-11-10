@@ -1,9 +1,10 @@
 package com.example.nyabankomaten;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Client extends Person {
+public class Client extends Person implements Serializable {
 
     private List<Account> account;
 
@@ -25,5 +26,9 @@ public class Client extends Person {
 
     public void addAccount(Account accountNum) {
         this.account.add(accountNum);
+    }
+
+    public void saveClient(){
+
     }
 }

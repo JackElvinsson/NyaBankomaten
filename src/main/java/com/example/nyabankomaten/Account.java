@@ -46,7 +46,7 @@ public class Account implements Printable {
         this.balance += balance;
     }
     public void payLoan(){
-        balance -= loan;
+        balance -= (loan * loanDetails.interest);
         loan = 0;
         loanDetails = Interest.NONE;
     }
